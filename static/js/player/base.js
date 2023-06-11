@@ -23,6 +23,7 @@ export class Player extends GameObeject {
         this.gravity = 50;
 
         this.ctx = this.root.game_map.ctx;
+        this.status = 3; // 0: idle, 1: forward, 2: backward, 3: jump, 4: attack,  5: be attacked
     }
 
     start () {
