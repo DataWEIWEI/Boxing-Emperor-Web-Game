@@ -17,7 +17,7 @@ class KOF {
             }),
 
             new Player(this, {
-                id: 0,
+                id: 1,
                 x: 900,
                 y: 0,
                 width: 120,
