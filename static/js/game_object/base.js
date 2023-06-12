@@ -13,7 +13,6 @@ class GameObeject {
     }
 
     update () { // it is executed onec per time(except for first time)
-    
     }
 
     destroy () { // delete current object
@@ -43,7 +42,6 @@ let Game_Object_Frame = (timestamp) => {
 }
 
 requestAnimationFrame(Game_Object_Frame);
-
 export {
     GameObeject
 }

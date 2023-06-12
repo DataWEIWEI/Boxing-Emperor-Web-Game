@@ -23,9 +23,7 @@ class GameMap extends GameObeject {
     }
 
     render() {
-        // this.cts.clearRect(0, 0, this.$canvas.width(), this.$canvas.height());
-        this.ctx.fillStyle = 'black';
-        this.ctx.fillRect(0, 0, this.$canvas.width(), this.$canvas.height())
+        this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     }
 }
 

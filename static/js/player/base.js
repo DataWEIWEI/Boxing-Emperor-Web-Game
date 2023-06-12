@@ -23,9 +23,11 @@ export class Player extends GameObeject {
         this.gravity = 50;
 
         this.ctx = this.root.game_map.ctx;
-        this.status = 3; // 0: idle, 1: forward, 2: backward, 3: jump, 4: attack,  5: be attacked
-
         this.pressed_keys = this.root.game_map.Controller.pressed_keys;
+
+        this.status = 3; // 0: idle, 1: forward, 2: backward, 3: jump, 4: attack,  5: be attacked
+        this.animation = new Map();
+        this.frame_current_cnt = 0;
     }
 
     start() {
@@ -46,8 +48,12 @@ export class Player extends GameObeject {
             space = this.pressed_keys.has('Enter');
         }
 
-        if (this.status === 0 || this.status === 1) {
-            if (w) {
+        if (this.status === 0 || this.status === 1 || this.status === 2) {
+            if (space) {
+                this.status = 4;
+                this.vx = 0;
+                this.frame_current_cnt = 0;
+            } else if (w) {
                 if (d) {
                     this.vx = this.speedx;
                 } else if (a) {
@@ -57,6 +63,7 @@ export class Player extends GameObeject {
                 }
                 this.vy = this.speedy;
                 this.status = 3;
+                this.frame_current_cnt = 0;
             } else if (d) {
                 this.vx = this.speedx;
                 this.status = 1;
@@ -72,7 +79,9 @@ export class Player extends GameObeject {
     }
 
     update_move() {
-        this.vy += this.gravity;
+        if (this.status === 3) {
+            this.vy += this.gravity;
+        }
 
         this.x += this.vx * this.timedelta / 1000;
         this.y += this.vy * this.timedelta / 1000;
@@ -86,7 +95,7 @@ export class Player extends GameObeject {
         if (this.x < 0)  {
             this.x = 0;
         } else if (this.x + this.width > this.root.game_map.$canvas.width()) {
-            this.x = root.game_map.$canvas.width() - this.width;
+            this.x = this.root.game_map.$canvas.width() - this.width;
         }
     }
 
@@ -97,8 +106,22 @@ export class Player extends GameObeject {
     }
 
     render() {
-        this.ctx.fillStyle = this.color;
-        this.ctx.fillRect(this.x, this.y, this.width, this.height)
-    }
+        // this.ctx.fillStyle = this.color;
+        // this.ctx.fillRect(this.x, this.y, this.width, this.height)a
 
+        let status = this.status;
+        let obj = this.animation.get(status);
+        if (obj && obj.loaded) {
+            let k = parseInt(this.frame_current_cnt / obj.frame_rate) % obj.frame_cnt;
+            let image = obj.gif.frames[k].image;
+            this.ctx.drawImage(image, this.x + obj.offset_x, this.y + obj.offset_y, image.width * obj.scale, image.height * obj.scale);
+        }
+
+        if ((status === 4 || status === 3) && this.frame_current_cnt === obj.frame_rate * (obj.frame_cnt - 1)) {
+            this.status = 0; // end of animation
+        }
+
+        this.frame_current_cnt++;
+    }
 }
+
