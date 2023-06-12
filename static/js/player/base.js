@@ -128,6 +128,7 @@ export class Player extends GameObeject {
                 let image = obj.gif.frames[k].image;
                 this.ctx.drawImage(image, this.x + obj.offset_x, this.y + obj.offset_y, image.width * obj.scale, image.height * obj.scale);
             } else {
+                // role mirror
                 this.ctx.save();
                 this.ctx.scale(-1, 1);
                 this.ctx.translate(-this.root.game_map.$canvas.width(), 0);
