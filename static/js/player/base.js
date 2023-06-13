@@ -30,6 +30,8 @@ export class Player extends GameObeject {
         this.frame_current_cnt = 0;
 
         this.hp = 100;
+        this.$hp = this.root.$kof.find(`.kof-head-hp-${this.id}>div`)
+        this.$hp_div = this.root.$kof.find(`.kof-head-hp-${this.id}>div>div`)
     }
 
     start() {
@@ -128,7 +130,15 @@ export class Player extends GameObeject {
         this.status = 5;
         this.frame_current_cnt = 0;
         
-        this.hp = Math.max(this.hp - 50, 0);
+        this.hp = Math.max(this.hp - 10, 0);
+
+        this.$hp_div.animate({
+            width: this.$hp.parent().width() * this.hp / 100
+        }, 300);
+
+        this.$hp.animate({
+            width: this.$hp.parent().width() * this.hp / 100
+        }, 600);
 
         if (this.hp <= 0) {
             this.status = 6;
@@ -214,13 +224,12 @@ export class Player extends GameObeject {
             }
         }
 
-        if (status <= 6 && status >= 3 && this.frame_current_cnt === obj.frame_rate * (obj.frame_cnt - 1) - 1) {
-            if (status === 6) {
-                this.frame_current_cnt--;
-            } else {
+        if (status <= 5 && status >= 3 && this.frame_current_cnt === obj.frame_rate * (obj.frame_cnt - 1) - 1) 
                 this.status = 0; // end of animation
-            }
-        }
+
+        if (status === 6 && this.frame_current_cnt === obj.frame_rate * (obj.frame_cnt - 1))
+                this.frame_current_cnt--;
+
 
         this.frame_current_cnt++;
     }
